@@ -1,3 +1,6 @@
+import { useNavigate } from 'react-router-dom'
+import { useAuthStore } from '../../store/authStore'
+import toast from 'react-hot-toast'
 import type { Facility } from '../../data/facilities'
 
 interface FacilityPricingProps {
@@ -5,8 +8,23 @@ interface FacilityPricingProps {
 }
 
 function FacilityPricing({ facility }: FacilityPricingProps) {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const navigate = useNavigate()
+
   const formatPrice = (price: number) => {
     return (price / 10000).toLocaleString() + '만원'
+  }
+
+  const handleReservation = () => {
+    if (!isAuthenticated) {
+      // 미로그인: 현재 요양원 페이지로 돌아올 수 있도록 redirect 파라미터 추가
+      navigate(`/login?redirect=/facility/${facility.id}`)
+    } else {
+      // 로그인됨: 서비스 준비중 알림
+      toast('서비스 준비중입니다', {
+        icon: '🚧',
+      })
+    }
   }
 
   return (
@@ -22,7 +40,10 @@ function FacilityPricing({ facility }: FacilityPricingProps) {
 
       {/* CTA Buttons */}
       <div className="space-y-3 mb-6">
-        <button className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 rounded-lg transition-colors">
+        <button
+          onClick={handleReservation}
+          className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 rounded-lg transition-colors"
+        >
           예약 신청하기
         </button>
       </div>

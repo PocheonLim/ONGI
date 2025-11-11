@@ -1,62 +1,68 @@
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuthStore } from '../store/authStore'
 import Container from '../components/layout/Container'
+import toast from 'react-hot-toast'
 
 function MyPage() {
+  const { isAuthenticated, user, logout } = useAuthStore()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login')
+    }
+  }, [isAuthenticated, navigate])
+
+  const handleLogout = () => {
+    logout()
+    toast.success('로그아웃 되었습니다')
+    navigate('/')
+  }
+
+  if (!isAuthenticated || !user) {
+    return null
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <Container>
         <div className="max-w-2xl mx-auto">
-          {/* Login Section */}
-          <div className="bg-white rounded-lg shadow p-8 mb-6 mt-12">
-            <div className="text-center mb-6">
-              <button className="w-full bg-[#FEE500] cursor-pointer text-gray-900 font-medium py-3 rounded-lg mb-4 flex items-center justify-center gap-2">
-                <span className="text-xl">💬</span>
-                카카오로 시작하기
-              </button>
-              <div className="text-sm text-gray-500 mb-4">또는</div>
-            </div>
+          <div className="bg-white rounded-lg shadow p-8">
+            <h1 className="text-3xl font-bold mb-8">마이페이지</h1>
 
-            {/* Email Login Form */}
-            <div className="space-y-4">
-              <input
-                type="email"
-                placeholder="이메일"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400"
-              />
-              <input
-                type="password"
-                placeholder="비밀번호"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400"
-              />
-
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="keepLogin"
-                  className="w-4 h-4 text-red-500"
-                />
-                <label htmlFor="keepLogin" className="text-sm text-gray-700">
-                  로그인상태유지
-                </label>
+            <div className="space-y-6">
+              {/* User Info */}
+              <div className="pb-6 border-b">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                    <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">이메일</p>
+                    <p className="text-lg font-medium text-gray-900">{user.email}</p>
+                  </div>
+                </div>
               </div>
 
-              <button className="w-full bg-white hover:bg-gray-50 border border-gray-300 text-gray-900 font-medium py-3 rounded-lg">
-                로그인
-              </button>
-
-              <div className="flex justify-center gap-4 text-sm text-gray-600">
-                <button className="hover:text-gray-900">회원가입</button>
-                <span className="text-gray-300">·</span>
-                <button className="hover:text-gray-900">아이디 찾기</button>
-                <span className="text-gray-300">·</span>
-                <button className="hover:text-gray-900">비밀번호 찾기</button>
+              {/* Logout Button */}
+              <div>
+                <button
+                  onClick={handleLogout}
+                  className="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 rounded-lg transition-colors"
+                >
+                  로그아웃
+                </button>
               </div>
             </div>
           </div>
 
-          {/* Info Section */}
-          <div className="bg-blue-50 rounded-lg p-6">
+          {/* Additional Info */}
+          <div className="mt-6 bg-blue-50 rounded-lg p-6">
             <h3 className="font-medium text-gray-900 mb-2">
-              로그인하시면 더 많은 서비스를 이용하실 수 있습니다
+              이용 가능한 서비스
             </h3>
             <ul className="text-sm text-gray-600 space-y-1">
               <li>• 관심 요양원 저장</li>
