@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Header from './components/layout/Header'
 import Home from './pages/Home'
 import MyPage from './pages/MyPage'
+import FacilityDetail from './pages/FacilityDetail'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="/facility/:id" element={<FacilityDetail />} />
       </Routes>
     </BrowserRouter>
   )
