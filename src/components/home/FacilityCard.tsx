@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { Facility } from '../../data/facilities'
 
 interface FacilityCardProps {
@@ -10,7 +11,10 @@ function FacilityCard({ facility }: FacilityCardProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+    <Link
+      to={`/facility/${facility.id}`}
+      className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer block"
+    >
       {/* Image */}
       <div className={`${facility.bgColor} h-40 flex items-center justify-center`}>
         <div className="text-4xl">🏥</div>
@@ -28,7 +32,7 @@ function FacilityCard({ facility }: FacilityCardProps) {
           <span className="text-gray-500">{facility.distance}</span>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
